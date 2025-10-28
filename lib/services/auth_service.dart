@@ -159,7 +159,7 @@ class AuthService {
         'Authorization': 'Bearer $token',
       },
       body: jsonEncode(<String, String>{
-        'package': "a5starcompany.com.megacheapdata",
+        'package': appId,
       }),
     );
 

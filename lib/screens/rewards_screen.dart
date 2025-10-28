@@ -117,7 +117,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(username ?? 'Player', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                      Text('Level 12 Player', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      Text('Level 1 Player', style: TextStyle(color: Colors.white70, fontSize: 14)),
                     ],
                   ),
                 ],
