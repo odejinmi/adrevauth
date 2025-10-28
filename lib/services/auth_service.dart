@@ -24,8 +24,7 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     // prefs.clear();
     final token = prefs.getString('token');
-    final rememberme = prefs.getBool('rememberMe')??false;
-    _authStateController.add(token != null && token.isNotEmpty && rememberme);
+    _authStateController.add(token != null && token.isNotEmpty);
     if (token != null) {
       mytask(); // Fetch tasks if the user is already logged in
     }
@@ -180,7 +179,7 @@ class AuthService {
     if (token == null) return false;
 
     final response = await http.post(
-      Uri.parse('$baseUrl/apps/$appId/tasks/1/log'),
+      Uri.parse('$baseUrl/apps/$appId/tasks/log'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
@@ -203,11 +202,9 @@ class AuthService {
     final token = prefs.getString('token');
     final appId = prefs.getString('appId');
 
-    print("my task");
     if (token == null || appId == null) {
       return []; // Not logged in or enrolled, return empty list
     }
-    print("my task");
     final response = await http.get(
       Uri.parse('$baseUrl/apps/$appId/my-tasks'),
       headers: <String, String>{
@@ -217,11 +214,44 @@ class AuthService {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       // Use the generated parsing function to safely decode the response
       return userTasksFromJson(response.body);
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
+      prefs.clear();
+      _authStateController.add(false);
+      // Use the generated parsing function to safely decode the response
+      return [];
     } else {
       return [];
+    }
+  }
+
+  Future<Map<String,dynamic>> dashboard() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    final appId = prefs.getString('appId');
+
+    if (token == null || appId == null) {
+      return {}; // Not logged in or enrolled, return empty list
+    }
+    final response = await http.get(
+      Uri.parse('$baseUrl/apps/$appId/summary'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Use the generated parsing function to safely decode the response
+      return jsonDecode(response.body);
+    } else if (response.statusCode == 401 || response.statusCode == 403) {
+      prefs.clear();
+      _authStateController.add(false);
+      // Use the generated parsing function to safely decode the response
+      return {};
+    } else {
+      return {};
     }
   }
 }

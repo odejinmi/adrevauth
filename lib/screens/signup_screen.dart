@@ -17,7 +17,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _authService = AuthService.instance;
   bool _passwordVisible = false;
   bool _isLoading = false;
-  bool _rememberMe = false;
 
   Future<void> _signup() async {
     if (_formKey.currentState!.validate()) {
@@ -162,25 +161,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                 // Remember Me
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: Checkbox(
-                        value: _rememberMe,
-                        onChanged: (value) {
-                          setState(() {
-                            _rememberMe = value ?? false;
-                          });
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text('Remember Me'),
-                  ],
-                ),
                 const SizedBox(height: 24),
 
                 // Sign Up Button

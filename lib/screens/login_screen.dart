@@ -19,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _adrevAuth = AdrevAuth.instance;
   bool _passwordVisible = false;
-  bool _rememberMe = false;
   bool _isLoading = false;
 
   Future<void> _login() async {
@@ -146,26 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Checkbox(
-                              value: _rememberMe,
-                              onChanged: (value) async {
-                                setState(()  {
-                                  _rememberMe = value ?? false;
-                                });
-                                final prefs = await SharedPreferences.getInstance();
-                                prefs.setBool('rememberMe', _rememberMe);
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text('Remember Me'),
-                        ],
-                      ),
+                      Spacer(),
                       TextButton(
                         onPressed: () {
                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));

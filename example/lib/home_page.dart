@@ -69,7 +69,6 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: ,
         title: const Text('AdRev Games'),
         actions: [
           // IconButton(

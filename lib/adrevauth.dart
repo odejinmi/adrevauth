@@ -71,6 +71,11 @@ class AdrevAuth {
   Widget get initialScreen => const LoginScreen();
   Widget get rewardsScreen => const RewardsScreen();
 
+  int _highscore = 0;
+  int get highscore => _highscore;
+  set highscore(int value) => _highscore = value;
+
+  VoidCallback? exitGame;
   // --- Authentication --- //
 
   Stream<bool> get onAuthStateChanged => _authService.onAuthStateChanged;
@@ -93,28 +98,28 @@ class AdrevAuth {
   /// Triggers the callback to start the main game, as defined by the consuming app.
   /// This is now a function variable that can be reassigned
 
-  Future<bool> Logging(String code, String highscore) async {
-      final success = await _authService.logging(code, highscore);
+  Future<bool> Logging(String code,String highscore) async {
+      final success = await _authService.logging(code,  highscore);
       return success;
     }
 
-  Future<bool> wingame() async {
+  Future<bool> wingamelogging() async {
       final success = await _authService.logging("win_game", "0");
       return success;
     }
 
-  Future<bool> watchad() async {
+  Future<bool> watchadlogging() async {
     final success = await _authService.logging("watch_ad", "0");
     return success;
   }
 
 
-  Future<bool> highscore(String newscore) async {
+  Future<bool> highscorelogging(String newscore) async {
     final success = await _authService.logging("highscore", newscore);
     return success;
   }
 
-   Future<bool> play_day() async {
+   Future<bool> play_daylogging() async {
     final success = await _authService.logging("play_day", "0");
     return success;
   }

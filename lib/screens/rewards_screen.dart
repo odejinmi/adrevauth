@@ -14,6 +14,9 @@ class RewardsScreen extends StatefulWidget {
 class _RewardsScreenState extends State<RewardsScreen> {
   Future<List<UserTask>>? _tasksFuture;
   String? username;
+  Map<String, dynamic>? _dashboardFuture;
+
+  final adrevAuth = AdrevAuth.instance;
 
   @override
   void initState() {
@@ -22,47 +25,37 @@ class _RewardsScreenState extends State<RewardsScreen> {
   }
 
   void _handleTaskAction(UserTask task) {
-    final adrevAuth = AdrevAuth.instance;
-    // Example: if the task is to watch an ad, show a rewarded ad
-    if (task.task.code.contains('watch')|| task.task.code.contains('daily')) {
+    if (task.task.code.contains('watch') || task.task.code.contains('daily')) {
       adrevAuth.showRewardedAd(onReward: () async {
-        String value = "";
-        if(task.task.code.contains("login")){
-         value = "login";
-        }else{
-         value =  "watch_ad";
+        String value = task.task.code.contains("login") ? "login" : "watch_ad";
+        // await adrevAuth.Logging(value, "0"); // This method does not exist on AdrevAuth
+        _refreshTasks(); // Refresh the list after reward
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Reward granted!')),
+          );
         }
-        await adrevAuth.Logging(value,"0");
-        // After reward, you might want to refresh the task list
-        setState(() {
-          _tasksFuture = AuthService.instance.mytask();
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Reward granted!')),
-        );
       });
-    } else{
-      AdrevAuth.instance.startGame();
+    } else {
+      adrevAuth.startGame();
     }
-    // TODO: Add logic for other task codes like 'play_game' or 'invite_friend'
   }
 
-  var authservice = AuthService.instance;
-  // Method to refresh the task list
   Future<void> _refreshTasks() async {
     final prefs = await SharedPreferences.getInstance();
-    username = prefs.getString('username');
-    setState(() {
-      var enrolluser = authservice.enrolluser();
-      _tasksFuture = authservice.mytask();
-    });
-    // Wait for the tasks to be refreshed
-    await _tasksFuture;
+    final dashboardData = await AuthService.instance.dashboard();
+    if (mounted) {
+      setState(() {
+        username = prefs.getString('username');
+        _dashboardFuture = dashboardData;
+        _tasksFuture = AuthService.instance.mytask();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF4A148C); // Main purple from the design
+    const primaryColor = Color(0xFF4A148C);
 
     return Scaffold(
       backgroundColor: primaryColor,
@@ -71,10 +64,21 @@ class _RewardsScreenState extends State<RewardsScreen> {
         color: primaryColor,
         backgroundColor: Colors.white,
         child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(), // Ensures the list is always scrollable
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             _buildHeader(),
-            _buildBody(),
+            FutureBuilder<List<UserTask>>(
+              future: _tasksFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+                  return _buildLoadingBody();
+                }
+                if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildEmptyBody();
+                }
+                return _buildPopulatedBody(snapshot.data!);
+              },
+            ),
           ],
         ),
       ),
@@ -106,13 +110,13 @@ class _RewardsScreenState extends State<RewardsScreen> {
                   CircleAvatar(
                     radius: 24,
                     backgroundColor: Colors.white,
-                    child: Text(username?.substring(0, 2)??'', style: TextStyle(color: Color(0xFF4A148C), fontWeight: FontWeight.bold)),
+                    child: Text(username?.substring(0, 2).toUpperCase() ?? '', style: TextStyle(color: Color(0xFF4A148C), fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(username??'', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text(username ?? 'Player', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                       Text('Level 12 Player', style: TextStyle(color: Colors.white70, fontSize: 14)),
                     ],
                   ),
@@ -122,9 +126,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _StatCard(value: '7', label: 'Day streak'),
-                  _StatCard(value: '18', label: 'Task Done'),
-                  _StatCard(value: '5.2k', label: 'Total Earned'),
+                  _StatCard(value: _dashboardFuture?['daily_streak']?.toString() ?? '0', label: 'Day streak'),
+                  _StatCard(value: _dashboardFuture?['tasks_completed']?.toString() ?? '0', label: 'Task Done'),
+                  _StatCard(value: _dashboardFuture?['total_earned']?.toString() ?? '0', label: 'Total Earned'),
                 ],
               ),
             ],
@@ -134,55 +138,72 @@ class _RewardsScreenState extends State<RewardsScreen> {
     );
   }
 
-  SliverToBoxAdapter _buildBody() {
+  Widget _buildLoadingBody() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Container(
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0))),
+        child: const Center(child: CircularProgressIndicator()),
+      ),
+    );
+  }
+
+  Widget _buildEmptyBody() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'My task',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
+            const SizedBox(height: 16),
+            const Expanded(
+              child: Center(
+                child: Text('No tasks available right now.', style: TextStyle(color: Colors.grey)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _buildPopulatedBody(List<UserTask> tasks) {
     return SliverToBoxAdapter(
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24.0),
-            topRight: Radius.circular(24.0),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0)),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'My task',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
-              ),
-              const SizedBox(height: 16),
-              FutureBuilder<List<UserTask>>(
-                future: _tasksFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
-                    return const Center(child: Padding(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 40.0),
-                      child: CircularProgressIndicator(),
-                    ));
-                  }
-                  if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child: Text('No tasks available right now.', style: TextStyle(color: Colors.grey)),
-                    ));
-                  }
-                  final tasks = snapshot.data!;
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: tasks.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      return _TaskItem(task: tasks[index], onAction: () => _handleTaskAction(tasks[index]));
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'My task',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+            ),
+            const SizedBox(height: 16),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: tasks.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                return _TaskItem(task: tasks[index], onAction: () => _handleTaskAction(tasks[index]));
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -196,11 +217,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF4A148C),
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: const BeveledRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-          ),
+          shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
         ),
-        onPressed: AdrevAuth.instance.startGame, // Call the central startGame method
+        onPressed: adrevAuth.startGame,
         child: const Text('Start game', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
       ),
     );
@@ -242,20 +261,22 @@ class _TaskItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isCompleted = task.progressCount >= task.task.targetCount;
     final double progress = isCompleted ? 1.0 : (task.progressCount / (task.task.targetCount == 0 ? 1 : task.task.targetCount));
-    print(task.toJson());
+    if (task.task.code.contains('reach_highscore')) {
+      AdrevAuth.instance.highscore = task.task.targetCount;
+    }
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.white, 
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: Colors.grey.shade200)
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border.all(color: Colors.grey.shade200)),
       child: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Image.network(
-              'https://picsum.photos/seed/${task.task.id}/80', 
+              'https://picsum.photos/seed/${task.task.id}/80',
               width: 60,
               height: 60,
               fit: BoxFit.cover,
