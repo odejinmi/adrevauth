@@ -5,27 +5,22 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'services/auth_service.dart';
+import 'ads/ad_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/rewards_screen.dart';
-import 'ads/ad_service.dart';
-
-
+import 'services/auth_service.dart';
 
 /// The main entry point for the AdrevAuth SDK.
 class AdrevAuth {
   final AuthService _authService;
   final AdService _adService;
+
   /// Callback function to start the main game
   /// This can be reassigned by the app to customize the game start behavior
   late VoidCallback startGame;
 
   // Private constructor
-  AdrevAuth._(
-    this._authService, 
-    this._adService,
-    VoidCallback onStartGame,
-  ) {
+  AdrevAuth._(this._authService, this._adService, VoidCallback onStartGame) {
     // Initialize startGame with the provided callback
     startGame = onStartGame;
   }
@@ -35,7 +30,9 @@ class AdrevAuth {
 
   static AdrevAuth get instance {
     if (_instance == null) {
-      throw Exception('AdrevAuth has not been initialized. Call AdrevAuth.initialize() first.');
+      throw Exception(
+        'AdrevAuth has not been initialized. Call AdrevAuth.initialize() first.',
+      );
     }
     return _instance!;
   }
@@ -61,10 +58,9 @@ class AdrevAuth {
     );
     adService.init();
 
-    _instance = AdrevAuth._(AuthService.instance, adService,  onStartGame);
+    _instance = AdrevAuth._(AuthService.instance, adService, onStartGame);
     return _instance!;
   }
-
 
   // --- UI Screens --- //
 
@@ -98,28 +94,37 @@ class AdrevAuth {
   /// Triggers the callback to start the main game, as defined by the consuming app.
   /// This is now a function variable that can be reassigned
 
-  Future<bool> Logging(String code,String highscore) async {
-      final success = await _authService.logging(code,  highscore);
-      return success;
-    }
+  Future<bool> Logging(String code, String highscore) async {
+    final success = await _authService.logging(code, highscore);
+    return success;
+  }
 
   Future<bool> wingamelogging() async {
-      final success = await _authService.logging("win_game", "0");
-      return success;
-    }
+    final success = await _authService.logging("win_game", "0");
+    return success;
+  }
 
   Future<bool> watchadlogging() async {
     final success = await _authService.logging("watch_ad", "0");
     return success;
   }
 
+  Future<bool> dailylogging() async {
+    final success = await _authService.logging("login", "0");
+    return success;
+  }
+
+  Future<bool> startGamelogging() async {
+    final success = await _authService.logging("start_game", "0");
+    return success;
+  }
 
   Future<bool> highscorelogging(String newscore) async {
     final success = await _authService.logging("highscore", newscore);
     return success;
   }
 
-   Future<bool> play_daylogging() async {
+  Future<bool> play_daylogging() async {
     final success = await _authService.logging("play_day", "0");
     return success;
   }

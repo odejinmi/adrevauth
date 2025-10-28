@@ -32,8 +32,14 @@ class _RewardsScreenState extends State<RewardsScreen> {
           String value = task.task.code.contains("login")
               ? "login"
               : "watch_ad";
-          await adrevAuth
-              .watchadlogging(); // This method does not exist on AdrevAuth
+          if (task.task.code.contains('watch')) {
+            await adrevAuth
+                .watchadlogging(); // This method does not exist on AdrevAuth
+          }
+
+          if (task.task.code.contains('daily')) {
+            await adrevAuth.dailylogging();
+          }
           _refreshTasks(); // Refresh the list after reward
           if (mounted) {
             ScaffoldMessenger.of(
@@ -43,7 +49,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
         },
       );
     } else {
-      adrevAuth.startGame();
+      adrevAuth.startGamelogging();
       adrevAuth.startGame();
     }
   }
@@ -210,7 +216,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'My Tasks',
+              'My Task(s)',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -247,7 +253,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'My task',
+              'My Task(s)',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
