@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../adrevauth.dart';
 import '../models/user_task.dart';
 import '../services/auth_service.dart';
@@ -26,17 +27,23 @@ class _RewardsScreenState extends State<RewardsScreen> {
 
   void _handleTaskAction(UserTask task) {
     if (task.task.code.contains('watch') || task.task.code.contains('daily')) {
-      adrevAuth.showRewardedAd(onReward: () async {
-        String value = task.task.code.contains("login") ? "login" : "watch_ad";
-        // await adrevAuth.Logging(value, "0"); // This method does not exist on AdrevAuth
-        _refreshTasks(); // Refresh the list after reward
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Reward granted!')),
-          );
-        }
-      });
+      adrevAuth.showRewardedAd(
+        onReward: () async {
+          String value = task.task.code.contains("login")
+              ? "login"
+              : "watch_ad";
+          await adrevAuth
+              .watchadlogging(); // This method does not exist on AdrevAuth
+          _refreshTasks(); // Refresh the list after reward
+          if (mounted) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Reward granted!')));
+          }
+        },
+      );
     } else {
+      adrevAuth.startGame();
       adrevAuth.startGame();
     }
   }
@@ -70,10 +77,13 @@ class _RewardsScreenState extends State<RewardsScreen> {
             FutureBuilder<List<UserTask>>(
               future: _tasksFuture,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    !snapshot.hasData) {
                   return _buildLoadingBody();
                 }
-                if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+                if (snapshot.hasError ||
+                    !snapshot.hasData ||
+                    snapshot.data!.isEmpty) {
                   return _buildEmptyBody();
                 }
                 return _buildPopulatedBody(snapshot.data!);
@@ -110,14 +120,30 @@ class _RewardsScreenState extends State<RewardsScreen> {
                   CircleAvatar(
                     radius: 24,
                     backgroundColor: Colors.white,
-                    child: Text(username?.substring(0, 2).toUpperCase() ?? '', style: TextStyle(color: Color(0xFF4A148C), fontWeight: FontWeight.bold)),
+                    child: Text(
+                      username?.substring(0, 2).toUpperCase() ?? '',
+                      style: TextStyle(
+                        color: Color(0xFF4A148C),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                   SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(username ?? 'Player', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                      Text('Level 1 Player', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                      Text(
+                        username ?? 'Player',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Level 1 Player',
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                      ),
                     ],
                   ),
                 ],
@@ -126,9 +152,22 @@ class _RewardsScreenState extends State<RewardsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _StatCard(value: _dashboardFuture?['daily_streak']?.toString() ?? '0', label: 'Day streak'),
-                  _StatCard(value: _dashboardFuture?['tasks_completed']?.toString() ?? '0', label: 'Task Done'),
-                  _StatCard(value: _dashboardFuture?['total_earned']?.toString() ?? '0', label: 'Total Earned'),
+                  _StatCard(
+                    value:
+                        _dashboardFuture?['daily_login_streak_days']
+                            ?.toString() ??
+                        '0',
+                    label: 'Daily Streak',
+                  ),
+                  _StatCard(
+                    value:
+                        _dashboardFuture?['tasks_completed']?.toString() ?? '0',
+                    label: 'Tasks Done',
+                  ),
+                  _StatCard(
+                    value: _dashboardFuture?['games_played']?.toString() ?? '0',
+                    label: 'Games Played',
+                  ),
                 ],
               ),
             ],
@@ -143,8 +182,12 @@ class _RewardsScreenState extends State<RewardsScreen> {
       hasScrollBody: false,
       child: Container(
         decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0))),
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
+          ),
+        ),
         child: const Center(child: CircularProgressIndicator()),
       ),
     );
@@ -157,19 +200,30 @@ class _RewardsScreenState extends State<RewardsScreen> {
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
         decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0))),
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'My task',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              'My Tasks',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 16),
             const Expanded(
               child: Center(
-                child: Text('No tasks available right now.', style: TextStyle(color: Colors.grey)),
+                child: Text(
+                  'No tasks available right now.',
+                  style: TextStyle(color: Colors.grey),
+                ),
               ),
             ),
           ],
@@ -183,7 +237,10 @@ class _RewardsScreenState extends State<RewardsScreen> {
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(24.0), topRight: Radius.circular(24.0)),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24.0),
+            topRight: Radius.circular(24.0),
+          ),
         ),
         padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
         child: Column(
@@ -191,7 +248,11 @@ class _RewardsScreenState extends State<RewardsScreen> {
           children: [
             const Text(
               'My task',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 16),
             ListView.separated(
@@ -200,7 +261,10 @@ class _RewardsScreenState extends State<RewardsScreen> {
               itemCount: tasks.length,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                return _TaskItem(task: tasks[index], onAction: () => _handleTaskAction(tasks[index]));
+                return _TaskItem(
+                  task: tasks[index],
+                  onAction: () => _handleTaskAction(tasks[index]),
+                );
               },
             ),
           ],
@@ -217,10 +281,19 @@ class _RewardsScreenState extends State<RewardsScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFF4A148C),
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: const BeveledRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+          shape: const BeveledRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
         ),
         onPressed: adrevAuth.startGame,
-        child: const Text('Start game', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+        child: const Text(
+          'Start game',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -243,9 +316,19 @@ class _StatCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(value, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(label, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
+          ),
         ],
       ),
     );
@@ -260,7 +343,10 @@ class _TaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isCompleted = task.progressCount >= task.task.targetCount;
-    final double progress = isCompleted ? 1.0 : (task.progressCount / (task.task.targetCount == 0 ? 1 : task.task.targetCount));
+    final double progress = isCompleted
+        ? 1.0
+        : (task.progressCount /
+              (task.task.targetCount == 0 ? 1 : task.task.targetCount));
     if (task.task.code.contains('reach_highscore')) {
       AdrevAuth.instance.highscore = task.task.targetCount;
     }
@@ -268,9 +354,10 @@ class _TaskItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(color: Colors.grey.shade200)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
       child: Row(
         children: [
           ClipRRect(
@@ -287,9 +374,18 @@ class _TaskItem extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(task.task.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(
+                  task.task.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text('+${task.task.rewardAmount} Coins', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                Text(
+                  '+${task.task.rewardAmount} Coins',
+                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -297,7 +393,9 @@ class _TaskItem extends StatelessWidget {
                       child: LinearProgressIndicator(
                         value: progress,
                         backgroundColor: Colors.grey[300],
-                        valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4A148C)),
+                        valueColor: const AlwaysStoppedAnimation<Color>(
+                          Color(0xFF4A148C),
+                        ),
                         minHeight: 6,
                         borderRadius: BorderRadius.circular(3),
                       ),
@@ -306,7 +404,9 @@ class _TaskItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  isCompleted ? 'Completed today' : '${task.progressCount}/${task.task.targetCount} completed',
+                  isCompleted
+                      ? 'Completed today'
+                      : '${task.progressCount}/${task.task.targetCount} completed',
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
