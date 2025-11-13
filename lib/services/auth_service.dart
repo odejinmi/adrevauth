@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_task.dart'; // Import the new models
 
@@ -32,6 +33,7 @@ class AuthService {
     // Automatically get the package name
     final packageInfo = await PackageInfo.fromPlatform();
     appId = packageInfo.packageName;
+    enrolluser();
   }
 
   Future<bool> login(String email, String password) async {
@@ -40,17 +42,14 @@ class AuthService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'email': email,
-        'password': password,
-      }),
+      body: jsonEncode(<String, String>{'email': email, 'password': password}),
     );
-    
+
     if (response.statusCode == 200) {
       final detail = json.decode(response.body);
       final prefs = await SharedPreferences.getInstance();
       print(detail);
-      await prefs.setString('name', detail['user']['name']??'');
+      await prefs.setString('name', detail['user']['name'] ?? '');
       await prefs.setString('username', detail['user']['username']);
       await prefs.setString('email', detail['user']['email']);
       await prefs.setString('token', detail['token']);
@@ -61,7 +60,7 @@ class AuthService {
       return false;
     }
   }
-  
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
@@ -89,7 +88,7 @@ class AuthService {
       final detail = json.decode(response.body);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', detail['token']);
-      _authStateController.add(true); 
+      _authStateController.add(true);
       mytask(); // Also fetch tasks on new signup
       return true;
     } else {
@@ -103,13 +102,11 @@ class AuthService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-        'email': email,
-      }),
+      body: jsonEncode(<String, String>{'email': email}),
     );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return data['token']; 
+      return data['token'];
     } else {
       return null;
     }
@@ -130,7 +127,12 @@ class AuthService {
     return response.statusCode == 200;
   }
 
-  Future<bool> resetPassword(String email, String otp, String password, String token) async {
+  Future<bool> resetPassword(
+    String email,
+    String otp,
+    String password,
+    String token,
+  ) async {
     final response = await http.post(
       Uri.parse('$baseUrl/reset-password'),
       headers: <String, String>{
@@ -140,7 +142,7 @@ class AuthService {
         'email': email,
         'otp': otp,
         'password': password,
-        'token': token
+        'token': token,
       }),
     );
     return response.statusCode == 200;
@@ -152,22 +154,22 @@ class AuthService {
 
     if (token == null) return false;
 
+    print("appId sdk ${appId}");
+
     final response = await http.post(
       Uri.parse('$baseUrl/apps/enroll'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode(<String, String>{
-        'package': appId,
-      }),
+      body: jsonEncode(<String, String>{'package': appId}),
     );
 
     if (response.statusCode == 201) {
       var data = json.decode(response.body);
       await prefs.setString('appId', data["data"]["app_id"].toString());
       return true;
-    } 
+    }
     return false;
   }
 
@@ -184,10 +186,7 @@ class AuthService {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode(<String, String>{
-        "event": event,
-        "value": highscore
-      }),
+      body: jsonEncode(<String, String>{"event": event, "value": highscore}),
     );
     print("Logging");
     print(event);
@@ -226,7 +225,7 @@ class AuthService {
     }
   }
 
-  Future<Map<String,dynamic>> dashboard() async {
+  Future<Map<String, dynamic>> dashboard() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
     final appId = prefs.getString('appId');
