@@ -1,6 +1,5 @@
+import 'package:adrevauth/utils/ad_util.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/ad_utils.dart';
 
 class AdSettingsScreen extends StatefulWidget {
   const AdSettingsScreen({super.key});

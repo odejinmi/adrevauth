@@ -66,15 +66,16 @@ class AuthGate extends StatelessWidget {
         //   // ...otherwise, show the SDK's login screen.
         //   return adrevAuth.initialScreen;
         // }
-        if (snapshot.data == true) {
-          // If logged in, go to the SDK's rewards screen first
-          return adrevAuth.rewardsScreen;
-          // If logged in, go directly to the app's home screen.
-          // The SDK will have already shown the rewards screen internally.
+        // if (snapshot.data == true) {
+        //   // If logged in, go to the SDK's rewards screen first
+        //   return adrevAuth.rewardsScreen;
+        //   // If logged in, go directly to the app's home screen.
+        //   // The SDK will have already shown the rewards screen internally.
           return HomePage(adrevAuth: adrevAuth,);
-        } else {
-          return adrevAuth.initialScreen;
-        }
+        // }
+        //  else {
+        //   return adrevAuth.initialScreen;
+        // }
       },
     );
   }

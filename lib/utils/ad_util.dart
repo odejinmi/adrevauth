@@ -1,4 +1,3 @@
-
 import '../ads/ad_service.dart';
 import '../services/settings_service.dart';
 
