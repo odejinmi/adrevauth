@@ -23,7 +23,7 @@ class LeaderBoardDialog extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('images/wooden_bg.png'),
+                      image: AssetImage('images/wooden_bg.png', package: 'adrevauth'),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -49,7 +49,7 @@ class LeaderBoardDialog extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Image.asset('images/leaderboard.png'),
+                child: Image.asset('images/leaderboard.png', package: 'adrevauth'),
               ),
             ),
             Positioned(
@@ -58,7 +58,7 @@ class LeaderBoardDialog extends StatelessWidget {
               left: 80,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width * .26,
-                height: MediaQuery.of(context).size.height * .35,
+                height: MediaQuery.of(context).size.height * .32,
                 child: ListView.builder(
                   itemCount: 20,
                   itemBuilder: (context, index) {

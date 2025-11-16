@@ -14,6 +14,7 @@ class TasksCard extends StatelessWidget {
       children: [
         Image.asset(
           'images/Rectangle.png',
+          package: 'adrevauth',
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -33,6 +34,7 @@ class TasksCard extends StatelessWidget {
           top: 10  ,
           child: Image.asset(
             'images/treasureBox.png',
+            package: 'adrevauth',
             width: 32  ,
             height: 32  ,
           ),

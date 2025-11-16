@@ -10,7 +10,7 @@ class WorldProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double progressRatio = progress / total;
+    final double progressRatio = progress / (total== 0 ?1:total);
 
     return Stack(
       alignment: Alignment.center,

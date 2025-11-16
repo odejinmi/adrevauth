@@ -21,7 +21,7 @@ class SettingsDialog extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 40  , horizontal: 20 ),
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('images/dialog.png'),
+                    image: AssetImage('images/dialog.png', package: 'adrevauth'),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -103,11 +103,13 @@ class SettingsDialog extends StatelessWidget {
     return SizedBox(
       height: 115  ,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
             icon,
             height: 60  ,
             width: 60 ,
+            package: 'adrevauth',
           ),
           SizedBox(height: 8  ),
           ShaderMask(

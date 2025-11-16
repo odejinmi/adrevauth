@@ -41,6 +41,7 @@ class EditProfileDialog extends StatelessWidget {
                         child: Image.asset(
                           'images/wooden.png',
                           fit: BoxFit.cover,
+                          package: 'adrevauth',
                         ),
                       ),
                       Positioned(
@@ -52,6 +53,7 @@ class EditProfileDialog extends StatelessWidget {
                           'images/blank_sheet.png',
                           width: 245,
                           fit: BoxFit.cover,
+                          package: 'adrevauth',
                         ),
                       ),
                     ],
@@ -66,7 +68,7 @@ class EditProfileDialog extends StatelessWidget {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Image.asset('images/edit_header.png'),
+                      child: Image.asset('images/edit_header.png', package: 'adrevauth'),
                     ),
                   ),
                 ],
@@ -132,12 +134,12 @@ class EditProfileDialog extends StatelessWidget {
                                 ),
                             itemCount: 9,
                             itemBuilder: (context, index) {
-                              return Image.asset(flags[index]);
+                              return Image.asset(flags[index], package: 'adrevauth');
                             },
                           ),
                         ),
                       ),
-                      10.spacingH,
+                      10.0.spacingH,
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.of(context).size.width * .2,

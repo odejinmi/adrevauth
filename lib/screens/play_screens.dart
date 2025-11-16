@@ -5,6 +5,8 @@ import 'package:adrevauth/screens/component/task_dialog.dart';
 import 'package:adrevauth/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
+import '../adrevauth.dart';
+
 class PlayScreens extends StatefulWidget {
   const PlayScreens({super.key});
 
@@ -66,10 +68,15 @@ class _PlayScreensState extends State<PlayScreens> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'packages/adrevauth/images/level1.png',
-                      height: 59,
-                      width: 150,
+                    InkWell(
+                      onTap: () {
+                        AdrevAuth.instance.startGame();
+                      },
+                      child: Image.asset(
+                        'packages/adrevauth/images/level1.png',
+                        height: 59,
+                        width: 150,
+                      ),
                     ),
                     InkWell(
                       onTap: () {

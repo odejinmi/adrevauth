@@ -46,7 +46,7 @@ class GradientField extends StatelessWidget {
               end: Alignment.bottomCenter,
             ),
           ),
-          width: MediaQuery.of(context).size.width * .7,
+          width: MediaQuery.of(context).size.width * .6,
 
           child: Padding(
             padding: const EdgeInsets.all(3.0),
@@ -80,6 +80,7 @@ class GradientField extends StatelessWidget {
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
+              width: MediaQuery.of(context).size.width * .6,
             ),
           ),
         ),

@@ -89,7 +89,6 @@ class Landingpage extends StatelessWidget {
               36.0.spacingH,
               InkWell(
                 onTap: () {
-                  // adrevAuth.startGame();
                                           Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => PlayScreens()),

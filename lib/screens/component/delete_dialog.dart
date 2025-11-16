@@ -17,12 +17,12 @@ class DeleteDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 240,
+                  height: 260,
                   width: 270,
                   padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('images/woodenBgHalf.png'),
+                      image: AssetImage('images/woodenBgHalf.png', package: 'adrevauth'),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -48,9 +48,9 @@ class DeleteDialog extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('images/no.png', height: 70, width: 72),
-                          32.spacingW,
-                          Image.asset('images/yes.png', height: 70, width: 72),
+                          Image.asset('images/no.png', height: 70, width: 72, package: 'adrevauth'),
+                          32.0.spacingW,
+                          Image.asset('images/yes.png', height: 70, width: 72, package: 'adrevauth'),
                         ],
                       ),
                     ],
@@ -64,7 +64,7 @@ class DeleteDialog extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                child: Image.asset('images/delete.png'),
+                child: Image.asset('images/delete.png', package: 'adrevauth'),
               ),
             ),
           ],
