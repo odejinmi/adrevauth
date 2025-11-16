@@ -1,4 +1,4 @@
-import 'package:adrevauth/screens/settings/component/image_filled_text.dart';
+import 'package:adrevauth/screens/component/image_filled_text.dart';
 import 'package:adrevauth/theme/app_colors.dart';
 import 'package:adrevauth/utils/extension/widget_extensions.dart';
 import 'package:adrevauth/widgets/custom_text.dart';

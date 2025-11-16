@@ -1,4 +1,5 @@
-import 'package:adrevauth/screens/settings/component/image_filled_text.dart';
+import 'package:adrevauth/screens/component/image_filled_text.dart';
+import 'package:adrevauth/screens/play_screens.dart';
 import 'package:flutter/material.dart';
 
 import '../adrevauth.dart';
@@ -88,7 +89,11 @@ class Landingpage extends StatelessWidget {
               36.0.spacingH,
               InkWell(
                 onTap: () {
-                  adrevAuth.startGame();
+                  // adrevAuth.startGame();
+                                          Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PlayScreens()),
+                        );
                 },
                 child: Image.asset(
                   'packages/adrevauth/images/play_button.png',

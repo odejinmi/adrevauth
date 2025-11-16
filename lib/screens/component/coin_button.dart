@@ -80,7 +80,7 @@ class CoinButton extends StatelessWidget {
         Positioned(
             left: 0,
             child: Image.asset(
-              'images/coin.png',
+              'packages/adrevauth/images/coin.png',
               height: 37,
               width: 46,
             ))
