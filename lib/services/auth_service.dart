@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -36,6 +37,8 @@ class AuthService {
     enrolluser();
   }
 
+  String errormessage = "";
+
   Future<bool> login(String email, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/login'),
@@ -57,13 +60,14 @@ class AuthService {
       mytask(); // Also fetch tasks on new login
       return true;
     } else {
+      errormessage = json.decode(response.body)['message'];
       return false;
     }
   }
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    await prefs.clear();
     _authStateController.add(false);
   }
 
@@ -92,6 +96,7 @@ class AuthService {
       mytask(); // Also fetch tasks on new signup
       return true;
     } else {
+      errormessage = json.decode(response.body)['message'];
       return false;
     }
   }
@@ -108,6 +113,7 @@ class AuthService {
       final data = json.decode(response.body);
       return data['token'];
     } else {
+      errormessage = json.decode(response.body)['message'];
       return null;
     }
   }
@@ -170,6 +176,7 @@ class AuthService {
       await prefs.setString('appId', data["data"]["app_id"].toString());
       return true;
     }
+    errormessage = json.decode(response.body)['message'];
     return false;
   }
 

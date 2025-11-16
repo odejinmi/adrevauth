@@ -46,37 +46,6 @@ class AuthGate extends StatelessWidget {
       );
     };
     // It uses a StreamBuilder to listen to your SDK's auth state stream
-    return StreamBuilder<bool>(
-      stream: adrevAuth.onAuthStateChanged,
-      builder: (context, snapshot) {
-        // // While waiting for the initial auth state, show a loading indicator
-        // if (snapshot.connectionState == ConnectionState.waiting) {
-        //   return const Scaffold(
-        //     body: Center(child: CircularProgressIndicator()),
-        //   );
-        // }
-        //
-        // final isAuthenticated = snapshot.data ?? false;
-        //
-        // // If the stream says the user is authenticated...
-        // if (isAuthenticated) {
-        //   // ...show the app's main home screen.
-        //   return HomePage(adrevAuth: adrevAuth,);
-        // } else {
-        //   // ...otherwise, show the SDK's login screen.
-        //   return adrevAuth.initialScreen;
-        // }
-        // if (snapshot.data == true) {
-        //   // If logged in, go to the SDK's rewards screen first
-        //   return adrevAuth.rewardsScreen;
-        //   // If logged in, go directly to the app's home screen.
-        //   // The SDK will have already shown the rewards screen internally.
-          return HomePage(adrevAuth: adrevAuth,);
-        // }
-        //  else {
-        //   return adrevAuth.initialScreen;
-        // }
-      },
-    );
+    return adrevAuth.initialScreen;
   }
 }

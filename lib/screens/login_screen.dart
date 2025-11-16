@@ -1,3 +1,4 @@
+import 'package:adrevauth/screens/landingpage.dart';
 import 'package:adrevauth/screens/settings/component/image_filled_text.dart';
 import 'package:adrevauth/theme/app_colors.dart';
 import 'package:adrevauth/utils/extension/widget_extensions.dart';
@@ -39,6 +40,12 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         if (success && mounted) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+              const Landingpage(),
+            ),
+          );
         } else if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

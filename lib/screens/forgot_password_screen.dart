@@ -318,9 +318,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       children: [
                                         InkWell(
                                           onTap: () {
-                                            Navigator.of(context).popUntil(
-                                              (route) => route.isFirst,
-                                            );
+                                            Navigator.of(context).pop();
                                             // },
                                           },
                                           child: RichText(

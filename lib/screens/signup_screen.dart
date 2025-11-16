@@ -1,3 +1,4 @@
+import 'package:adrevauth/screens/landingpage.dart';
 import 'package:adrevauth/screens/settings/component/image_filled_text.dart';
 import 'package:adrevauth/screens/login_screen.dart';
 import 'package:adrevauth/theme/app_colors.dart';
@@ -38,7 +39,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         if (!success && mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Signup failed. Please try again.')),
+            SnackBar(content: Text('Signup failed ${_authService.errormessage}. Please try again.')),
+          );
+        }else{
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const Landingpage(),
+            ),
           );
         }
       } catch (e) {

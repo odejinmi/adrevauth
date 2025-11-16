@@ -69,10 +69,10 @@ class _HomePageState extends State<HomePage> {
     // final currentMode = themeCtrl.mode;
 
     return
-    // Scaffold(
-    //   appBar: AppBar(
-    //     title: const Text('AdRev Games'),
-    //     actions: [
+    Scaffold(
+      appBar: AppBar(
+        title: const Text('AdRev Games'),
+        actions: [
     // IconButton(
     //   icon: _isLoading
     //       ? const SizedBox(
@@ -115,128 +115,28 @@ class _HomePageState extends State<HomePage> {
     //     PopupMenuItem(value: 'dark', child: Text('Dark')),
     //   ],
     // ),
-    //   ],
-    // ),
-    //   body: ListView.separated(
-    //     padding: const EdgeInsets.all(16),
-    //     itemCount: games.length,
-    //     separatorBuilder: (_, __) => const SizedBox(height: 12),
-    //     itemBuilder: (context, index) {
-    //       final (title, route, icon) = games[index];
-    //       return Card(
-    //         child: ListTile(
-    //           leading: Icon(icon),
-    //           title: Text(title),
-    //           trailing: const Icon(Icons.chevron_right),
-    //           onTap: () => route == '/rewards'?Navigator.of(context).push(
-    //             MaterialPageRoute(
-    //               builder: (context) => widget.adrevAuth.rewardsScreen,
-    //             ),
-    //           ): Navigator.pushNamed(context, route),
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
-    Stack(
-      children: [
-        Positioned.fill(
-          child: Transform.scale(
-            scale: 1.05,
-            child: Image.asset(
-              'packages/adrevauth/images/Bg.png',
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Positioned(
-          right: 0,
-          bottom: 73,
-          child: Image.asset(
-            'packages/adrevauth/images/treasure_hunt.png',
-            height: 204,
-            width: 204,
-          ),
-        ),
-        Scaffold(
-          backgroundColor: transparent,
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              192.0.spacingH,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 183,
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                'packages/adrevauth/images/leaf.png',
-                                height: 100,
-                                width: 144,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 120),
-                                child: Transform.rotate(
-                                  angle: 3.14159,
-                                  child: Image.asset(
-                                    'packages/adrevauth/images/leaf.png',
-                                    height: 110,
-                                    width: 155,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: 75,
-                          left: 30,
-                          // right: 36.w,
-                          child: ImageFilledText(
-                            text: 'EMMY',
-                            imagePath: 'packages/adrevauth/images/style.png',
-                            fontSize: 75,
-                            strokeColor: const Color(0xffBC25DB),
-                            strokeWidth: 8,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              36.0.spacingH,
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  'packages/adrevauth/images/play_button.png',
-                  height: 59,
-                  width: 145,
-                ),
-              ),
-              40.0.spacingH,
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-                child: Image.asset(
-                  'packages/adrevauth/images/login_button.png',
-                  height: 59,
-                  width: 145,
-                ),
-              ),
-            ],
-          ),
-        ),
       ],
+    ),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: games.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        itemBuilder: (context, index) {
+          final (title, route, icon) = games[index];
+          return Card(
+            child: ListTile(
+              leading: Icon(icon),
+              title: Text(title),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => route == '/rewards'?Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => widget.adrevAuth.rewardsScreen,
+                ),
+              ): Navigator.pushNamed(context, route),
+            ),
+          );
+        },
+      ),
     );
   }
 
