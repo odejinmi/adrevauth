@@ -157,7 +157,7 @@ class _TaskDialogState extends State<TaskDialog> {
 
                       child: ListView.separated(
                         physics: AlwaysScrollableScrollPhysics(),
-                        itemCount: 10,
+                        itemCount: tasks.length,
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 12),
                         itemBuilder: (context, index) {
