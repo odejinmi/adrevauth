@@ -17,13 +17,11 @@ class TaskDialog extends StatefulWidget {
 }
 
 class _TaskDialogState extends State<TaskDialog> {
-
   Future<List<UserTask>>? _tasksFuture;
   Map<String, dynamic>? _dashboardFuture;
 
   final adrevAuth = AdrevAuth.instance;
   final authService = AuthService.instance;
-
 
   @override
   void initState() {
@@ -74,11 +72,10 @@ class _TaskDialogState extends State<TaskDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: EdgeInsets.all(16  ),
+      insetPadding: EdgeInsets.all(16),
       child: Container(
         height: 400,
         child: Center(
-          // ✅ ensures the dialog content is centered
           child: Stack(
             children: [
               Row(
@@ -86,24 +83,25 @@ class _TaskDialogState extends State<TaskDialog> {
                 children: [
                   Container(
                     height: MediaQuery.of(context).size.height * .46,
-                    width: 270  ,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 40  , horizontal: 20  ),
+                    width: 270,
+                    padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('packages/adrevauth/images/wooden_bg.png'),
+                        image: AssetImage(
+                          'packages/adrevauth/images/wooden_bg.png',
+                        ),
                         fit: BoxFit.fill,
                       ),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(height: 50  ),
+                        SizedBox(height: 50),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [],
                         ),
-                        40.0  .spacingH,
+                        40.0.spacingH,
                       ],
                     ),
                   ),
@@ -154,21 +152,27 @@ class _TaskDialogState extends State<TaskDialog> {
                                     );
                     }
                     List<UserTask> tasks = snapshot.data!;
-                    return
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: tasks.length,
-                        separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * .4,
+
+                      child: ListView.separated(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        itemCount: 10,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 12),
                         itemBuilder: (context, index) {
                           final task = tasks[index];
-                          final bool isCompleted = task.progressCount >= task.task.targetCount;
+                          final bool isCompleted =
+                              task.progressCount >= task.task.targetCount;
                           final double progress = isCompleted
                               ? 1.0
                               : (task.progressCount /
-                              (task.task.targetCount == 0 ? 1 : task.task.targetCount));
+                                    (task.task.targetCount == 0
+                                        ? 1
+                                        : task.task.targetCount));
                           if (task.task.code.contains('reach_highscore')) {
-                            AdrevAuth.instance.highscore = task.task.targetCount;
+                            AdrevAuth.instance.highscore =
+                                task.task.targetCount;
                           }
                           return TasksCard(
                             children: [
@@ -176,13 +180,17 @@ class _TaskDialogState extends State<TaskDialog> {
                                 text: task.task.title,
                                 textColor: const Color(0xFF2D6A2D),
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13  ,
+                                fontSize: 13,
                               ),
-                              WorldProgressBar(progress: task.progressCount, total: task.task.targetCount),
+                              WorldProgressBar(
+                                progress: task.progressCount,
+                                total: task.task.targetCount,
+                              ),
                             ],
                           );
                         },
-                      );
+                      ),
+                    );
                   },
                 ),
                 // Column(
