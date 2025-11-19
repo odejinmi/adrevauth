@@ -2,6 +2,7 @@ import 'package:adrevauth/screens/component/coin_button.dart';
 import 'package:adrevauth/screens/component/leader_board_dialog.dart';
 import 'package:adrevauth/screens/component/settings_dialog.dart';
 import 'package:adrevauth/screens/component/task_dialog.dart';
+import 'package:adrevauth/screens/login_screen.dart';
 import 'package:adrevauth/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -35,8 +36,10 @@ class _PlayScreensState extends State<PlayScreens> {
                   Image.asset('packages/adrevauth/images/header.png'),
                   SafeArea(
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 5,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -47,9 +50,7 @@ class _PlayScreensState extends State<PlayScreens> {
                           ),
                           SizedBox(
                             height: 38,
-                            child: CoinButton(
-                              onPressed: () {},
-                            ),
+                            child: CoinButton(onPressed: () {}),
                           ),
                           Image.asset(
                             'packages/adrevauth/images/lock.png',
@@ -59,7 +60,7 @@ class _PlayScreensState extends State<PlayScreens> {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               const Spacer(),
@@ -95,45 +96,58 @@ class _PlayScreensState extends State<PlayScreens> {
                 ),
               ),
               Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Stack(
-                    children: [
-                      Image.asset('packages/adrevauth/images/header.png'),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 21),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => const SettingsDialog(),
-                                  );
-                                },
-                                child: Image.asset('packages/adrevauth/images/game_setting.png',
-                                    height: 59)),
-                            InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => const LeaderBoardDialog(),
-                                  );
-                                },
-                                child: Image.asset('packages/adrevauth/images/menu.png',
-                                    height: 59)),
-                            InkWell(
-                                onTap: () {
-                                  
-                                },
-                                child: Image.asset('packages/adrevauth/images/dash.png',
-                                    height: 59)),
-                          ],
-                        ),
+                alignment: Alignment.bottomCenter,
+                child: Stack(
+                  children: [
+                    Image.asset('packages/adrevauth/images/header.png'),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 21,
                       ),
-                    ],
-                  ))
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => const SettingsDialog(),
+                              );
+                            },
+                            child: Image.asset(
+                              'packages/adrevauth/images/game_setting.png',
+                              height: 59,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => const LeaderBoardDialog(),
+                              );
+                            },
+                            child: Image.asset(
+                              'packages/adrevauth/images/menu.png',
+                              height: 59,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                               Navigator.pop(context);
+
+                            },
+                            child: Image.asset(
+                              'packages/adrevauth/images/dash.png',
+                              height: 59,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
