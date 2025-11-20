@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+
 class GradientText extends StatelessWidget {
-  const GradientText(
-      {super.key, required this.label, required this.gradientColor, this.fontSize=14});
+  const GradientText({
+    super.key,
+    required this.label,
+    required this.gradientColor,
+    this.fontWeight=FontWeight.w500,
+    this.fontSize = 14,
+  });
   final String label;
   final List<Color> gradientColor;
   final double fontSize;
+  final FontWeight? fontWeight;
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
@@ -20,7 +27,7 @@ class GradientText extends StatelessWidget {
           color: Colors.white,
           fontFamily: 'GROBOLD',
           fontSize: fontSize,
-          fontWeight: FontWeight.w500,
+          fontWeight: fontWeight,
         ),
       ),
     );
