@@ -121,8 +121,8 @@ class _TaskDialogState extends State<TaskDialog> {
               ),
               Positioned(
                 top: 82,
-                right: 80,
-                left: 80,
+                right: 65,
+                left: 65,
                 child: FutureBuilder<List<UserTask>>(
                   future: _tasksFuture,
                   builder: (context, snapshot) {
@@ -153,8 +153,7 @@ class _TaskDialogState extends State<TaskDialog> {
                     }
                     List<UserTask> tasks = snapshot.data!;
                     return SizedBox(
-                      height: MediaQuery.of(context).size.height * .4,
-
+                      height: 240,
                       child: ListView.separated(
                         physics: AlwaysScrollableScrollPhysics(),
                         itemCount: tasks.length,

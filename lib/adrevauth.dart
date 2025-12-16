@@ -3,11 +3,8 @@ import 'dart:io';
 import 'package:adrevauth/screens/landingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ads/ad_service.dart';
-import 'screens/login_screen.dart';
 import 'screens/rewards_screen.dart';
 import 'services/auth_service.dart';
 
