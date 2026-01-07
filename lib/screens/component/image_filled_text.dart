@@ -59,7 +59,10 @@ class _ImageFilledTextState extends State<ImageFilledText> {
       return const Text('Error loading image');
     }
 
-    return Center(child: Image.memory(base64Decode(AdrevAuth.instance.imagelogo)));
+    return Center(
+        child: Image.memory(base64Decode(AdrevAuth.instance.imagelogo),
+        height:  100,)
+    );
     if (image == null) {
       return const SizedBox(
         height: 80,
