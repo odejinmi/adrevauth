@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
+
+import '../../adrevauth.dart';
 
 class ImageFilledText extends StatefulWidget {
   final String text;
@@ -55,6 +59,7 @@ class _ImageFilledTextState extends State<ImageFilledText> {
       return const Text('Error loading image');
     }
 
+    return Center(child: Image.memory(base64Decode(AdrevAuth.instance.imagelogo)));
     if (image == null) {
       return const SizedBox(
         height: 80,
@@ -67,18 +72,18 @@ class _ImageFilledTextState extends State<ImageFilledText> {
   alignment: Alignment.center,
   children: [
 
-    Text(
-      widget.text,
-      style: TextStyle(
-        fontSize: widget.fontSize,
-        fontWeight: FontWeight.w900,
-        fontFamily: 'Inter',
-        foreground: Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = widget.strokeWidth
-          ..color = widget.strokeColor,
-      ),
-    ),
+    // Text(
+    //   widget.text,
+    //   style: TextStyle(
+    //     fontSize: widget.fontSize,
+    //     fontWeight: FontWeight.w900,
+    //     fontFamily: 'Inter',
+    //     foreground: Paint()
+    //       ..style = PaintingStyle.stroke
+    //       ..strokeWidth = widget.strokeWidth
+    //       ..color = widget.strokeColor,
+    //   ),
+    // ),
 
     // Image fill
     ShaderMask(
@@ -91,14 +96,14 @@ class _ImageFilledTextState extends State<ImageFilledText> {
           Matrix4.identity().storage,
         );
       },
-      child: Text(
-        widget.text,
-        style: TextStyle(
-          fontSize: widget.fontSize,
-          fontWeight: FontWeight.w900,
-          color: Colors.white,
-        ),
-      ),
+      // child: Text(
+      //   widget.text,
+      //   style: TextStyle(
+      //     fontSize: widget.fontSize,
+      //     fontWeight: FontWeight.w900,
+      //     color: Colors.white,
+      //   ),
+      // ),
     ),
 
     // // Gradient overlay
@@ -125,7 +130,3 @@ class _ImageFilledTextState extends State<ImageFilledText> {
 
   }
 }
-
-
-
-

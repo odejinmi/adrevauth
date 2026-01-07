@@ -110,52 +110,60 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Center(
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  height: 183,
-                                  child: Row(
-                                    children: [
-                                      Image.asset(
-                                        'packages/adrevauth/images/leaf.png',
-                                        height: 100,
-                                        width: 144,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(top: 120),
-                                        child: Transform.rotate(
-                                          angle: 3.14159,
-                                          child: Image.asset(
-                                            'packages/adrevauth/images/leaf.png',
-                                            height: 110,
-                                            width: 150,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 75,
-                                  left: 30,
-                                  // right: 36  ,
-                                  child: ImageFilledText(
-                                    text: 'EMMY',
-                                    imagePath: 'packages/adrevauth/images/style.png',
-                                    fontSize: 75,
-                                    strokeColor: const Color(0xffBC25DB),
-                                    strokeWidth: 8,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      ImageFilledText(
+                        text: 'EMMY',
+                        imagePath:
+                        'packages/adrevauth/images/style.png',
+                        fontSize: 75,
+                        strokeColor: const Color(0xffBC25DB),
+                        strokeWidth: 8,
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Center(
+                      //       child: Stack(
+                      //         children: [
+                      //           SizedBox(
+                      //             height: 183,
+                      //             child: Row(
+                      //               children: [
+                      //                 Image.asset(
+                      //                   'packages/adrevauth/images/leaf.png',
+                      //                   height: 100,
+                      //                   width: 144,
+                      //                 ),
+                      //                 Padding(
+                      //                   padding: EdgeInsets.only(top: 120),
+                      //                   child: Transform.rotate(
+                      //                     angle: 3.14159,
+                      //                     child: Image.asset(
+                      //                       'packages/adrevauth/images/leaf.png',
+                      //                       height: 110,
+                      //                       width: 150,
+                      //                     ),
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //           Positioned(
+                      //             top: 75,
+                      //             left: 30,
+                      //             // right: 36  ,
+                      //             child: ImageFilledText(
+                      //               text: 'EMMY',
+                      //               imagePath: 'packages/adrevauth/images/style.png',
+                      //               fontSize: 75,
+                      //               strokeColor: const Color(0xffBC25DB),
+                      //               strokeWidth: 8,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       InkWell(
                         onTap: () {},
                         child: Image.asset(

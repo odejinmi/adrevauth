@@ -1,17 +1,24 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:adrevauth/adrevauth.dart'; // The app imports your SDK
+import 'package:flutter/services.dart';
 
 import 'home_page.dart'; // The app's own home screen
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final ByteData data = await rootBundle.load('assets/images/lamp.png');
+  final String base64Image = base64Encode(data.buffer.asUint8List());
   // The app initializes your SDK before running
   final adrevAuth = await AdrevAuth.initialize(
-      bannerAdUnitId: '',
-      interstitialAdUnitId: '',
-      rewardedAdUnitId: '',
-      onStartGame: () {
-        // The app defines what happens when the user starts the game
-      },
+    bannerAdUnitId: '',
+    interstitialAdUnitId: '',
+    rewardedAdUnitId: '',
+    onStartGame: () {
+      // The app defines what happens when the user starts the game
+    },
+    imagelogo: base64Image,
   );
   runApp(MyApp(adrevAuth: adrevAuth));
 }
@@ -47,5 +54,6 @@ class AuthGate extends StatelessWidget {
     };
     // It uses a StreamBuilder to listen to your SDK's auth state stream
     return adrevAuth.initialScreen;
+    // return Image.asset('assets/images/lamp.png');
   }
 }

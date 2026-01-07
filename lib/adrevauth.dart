@@ -19,11 +19,13 @@ class AdrevAuth {
   /// Callback function to start the main game
   /// This can be reassigned by the app to customize the game start behavior
   late VoidCallback startGame;
+  late String imagelogo;
 
   // Private constructor
-  AdrevAuth._(this._authService, this._adService, VoidCallback onStartGame) {
+  AdrevAuth._(this._authService, this._adService, VoidCallback onStartGame, String imagelogo) {
     // Initialize startGame with the provided callback
     startGame = onStartGame;
+    this.imagelogo = imagelogo;
   }
 
   // Singleton instance
@@ -46,6 +48,7 @@ class AdrevAuth {
     required String bannerAdUnitId,
     required String interstitialAdUnitId,
     required String rewardedAdUnitId,
+    required String imagelogo,
     required VoidCallback onStartGame,
   }) async {
     if (_instance != null) {
@@ -59,7 +62,7 @@ class AdrevAuth {
     );
     adService.init();
 
-    _instance = AdrevAuth._(AuthService.instance, adService, onStartGame);
+    _instance = AdrevAuth._(AuthService.instance, adService, onStartGame, imagelogo);
     return _instance!;
   }
 
